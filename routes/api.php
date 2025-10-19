@@ -18,29 +18,29 @@ use App\Models\Book;
 
 
 
-// // Books CRUD routes
-// Route::prefix('books')->group(function () {
-
-   
-//     Route::get('/', [BookController::class, 'index']);
-
-//     // Get a single book by id
-//     Route::get('/{id}', [BookController::class, 'show']);
-
-//     // Create a new book
-//     Route::post('/', [BookController::class, 'store']);
-
-//     // Update a book by id
-//     Route::put('/{id}', [BookController::class, 'update']);
-
-//     // Delete a book by id
-//     Route::delete('/{id}', [BookController::class, 'destroy']);
-// });
-
-
-
 Route::get('/books', function (Request $request) {
     return Book::all();
+});
+
+
+Route::post('/books', function(Request $request) {
+    return Book::create($request->all());
+});
+
+Route::get('/books/{id}', function($id) {
+    return Book::findOrFail($id);
+});
+
+
+Route::put('/books/{id}', function(Request $request, $id) {
+    $book = Book::findOrFail($id);
+    $book->update($request->all());
+    return $book;
+});
+
+Route::delete('/books/{id}', function($id) {
+    Book::findOrFail($id)->delete();
+    return response()->json(['status' => 'Book deleted successfully']);
 });
 
 
@@ -49,3 +49,4 @@ Route::get('/books', function (Request $request) {
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
